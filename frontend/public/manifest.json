@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Password Manager",
+  "version": "1.0",
+  "description": "A password manager extension to securely store and autofill passwords.",
+  "permissions": ["activeTab", "storage"],
+
+  "action": {
+        "default_popup": "index.html",
+        "default_title": "Password Manager"
+    }
+}
