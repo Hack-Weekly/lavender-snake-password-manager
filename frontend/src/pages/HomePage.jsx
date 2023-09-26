@@ -1,7 +1,7 @@
 import { NavBar } from "../components/NavBar"
 import { PasswordCardList } from "../components/PasswordCardList"
 
-export const Home = () => {
+export const HomePage = () => {
     return(
         <div className="flex flex-col gap-2 h-full">
             <NavBar />
