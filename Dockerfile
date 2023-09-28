@@ -5,7 +5,6 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NOWARNINGS="yes"
 
-
 RUN apt-get update \
   && apt-get install -y --no-install-recommends  build-essential libpq-dev \
   && rm -rf /var/lib/apt/lists/*
