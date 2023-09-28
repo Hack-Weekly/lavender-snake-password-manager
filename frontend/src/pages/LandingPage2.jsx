@@ -3,7 +3,7 @@ import Button from "../components/Button";
 import SignIn from "./SignIn.jsx";
 import SignUp from "./SignUp.jsx";
 
-export const HomePage = (props) => {
+export const LandingPage2 = (props) => {
   const [signinState, setSigninState] = useState(false);
   const [signupState, setSignupState] = useState(false);
 

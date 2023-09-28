@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import { HomePage } from './pages/HomePage';
+import { LandingPage2 } from './pages/LandingPage2';
 import LandingPage from './pages/LandingPage';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
     <div className="App">
       <div className='h-96 w-80 mx-auto bg-backdrop'>
         {!userTouchedButton && <LandingPage onClick={touchHandler} />}
-        {userTouchedButton && <HomePage onClick={touchHandler} />}
+        {userTouchedButton && <LandingPage2 onClick={touchHandler} />}
       </div>
     </div>
   );
