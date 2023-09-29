@@ -8,8 +8,8 @@ export const LandingPage = (props) => {
       <p className='text-white m-4 text-2xl'>
         <em>LavenderPass</em>
       </p>
-      <img className='h-24 w-24 mt-4' src={lockerImage} alt='locker' />
-      <p className='text-white m-4'>Manage your passwords <span className='text-btn-color'>securely</span> </p>
+      <img className='h-28 w-28 mt-4' src={lockerImage} alt='locker' />
+      <p className='text-white text-center text-xl m-4'>Manage your passwords <span className='text-btn-color'>securely</span> </p>
       <Button onClick={() => {props.handlePageChange("signIn")}}>Get Started</Button>
     </div>
   );
