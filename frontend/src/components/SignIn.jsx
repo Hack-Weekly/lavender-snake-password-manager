@@ -1,4 +1,4 @@
-import Button from '../components/Button.jsx';
+import Button from './Button.jsx';
 
 const SignIn = (props) => {
   return (
