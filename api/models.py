@@ -48,3 +48,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_absolute_url(self):
         return "/users/%i/" % (self.pk)
+
+
+class LockBox(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    login_website=models.TextField(blank=False)
+    login_id=models.TextField(blank=True)
+    login_password=models.TextField(blank=True)
+    login_note=models.TextField(blank=True)
+
+    def __str__(self):
+      return f"{self.login_website} - {self.id}" 
+

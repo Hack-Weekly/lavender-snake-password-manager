@@ -14,6 +14,8 @@ from django.views.generic import TemplateView
 
 User=get_user_model()
 # project imports
+from api.models import LockBox
+from api.serializers import LockBoxSerializer
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -56,4 +58,42 @@ def testEndPoint(request):
         except json.JSONDecodeError:
             return Response("Invalid JSON data", status.HTTP_400_BAD_REQUEST)
     return Response("Invalid JSON data", status.HTTP_400_BAD_REQUEST)
+
+
+class LockBoxAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request,website=None):
+        if website is None:
+            return JsonResponse({'message': 'Website for query required'}, status=status.HTTP_400_BAD_REQUEST)
+        lockbox=LockBox.objects.filter(user=request.user,login_website=website)
+        if not lockbox:
+            return JsonResponse({'message': 'The website does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = LockBoxSerializer(lockbox, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        request.data['user'] = request.user.id
+        serializer = LockBoxSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors)
+    
+    def put(self, request,website=None):
+        lockbox = LockBox.objects.filter(user=request.user,login_website=website)
+        if not lockbox:
+            return JsonResponse({'message': 'The website does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = LockBoxSerializer(lockbox, data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    
+    def delete(self, request,website=None):
+        lockbox = LockBox.objects.filter(user=request.user,login_website=website)
+        if not lockbox:
+            return JsonResponse({'message': 'The website does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        lockbox.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 

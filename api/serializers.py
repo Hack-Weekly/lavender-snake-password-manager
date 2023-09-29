@@ -5,10 +5,10 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.exceptions import ValidationError
-
+User=get_user_model()
 #project imports
 
-User=get_user_model()
+from api.models import LockBox
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -58,3 +58,21 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 # project serializers
+class LockBoxSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LockBox
+        fields = ['login_website','login_id','login_password','login_note']
+        read_only_fields = ['id']
+        extra_kwargs = {
+            'user': {'write_only': True},
+            'id': {'read_only': True},
+        }
+
+    def create(self, validated_data):
+        
+        return super().create(validated_data)
+
+    # def validate(self, data):
+    #     if not data['login_website'] and not data['login_id'] and not data['login_password'] and not data['login_note']:
+    #         raise ValidationError("At least one field must be filled")
+    #     return data
