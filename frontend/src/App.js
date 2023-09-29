@@ -1,12 +1,20 @@
+import { useState } from 'react';
 import './App.css';
-import { LandingPage } from './pages/LandingPage';
+import { LandingPage2 } from './pages/LandingPage2';
+import LandingPage from './pages/LandingPage';
 
 function App() {
+  const [userTouchedButton, setUserTouchedButton] = useState(false);
+
+  const touchHandler = () => {
+    (userTouchedButton === true) ? setUserTouchedButton(false) : setUserTouchedButton(true);
+  };
+
   return (
     <div className="App">
-      {/**/}
       <div className='h-96 w-80 mx-auto bg-backdrop'>
-          <LandingPage />
+        {!userTouchedButton && <LandingPage onClick={touchHandler} />}
+        {userTouchedButton && <LandingPage2 onClick={touchHandler} />}
       </div>
     </div>
   );
