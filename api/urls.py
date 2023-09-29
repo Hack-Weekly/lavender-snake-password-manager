@@ -14,4 +14,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', views.RegisterView.as_view(), name='auth_register'),
     path('test/', views.testEndPoint, name='test'),
+    path('get/<str:website>/', views.LockBoxAPIView.as_view(), name='get_lockbox'),
+    path('lockbox/', views.LockBoxAPIView.as_view(), name='lockbox'),
 ]
