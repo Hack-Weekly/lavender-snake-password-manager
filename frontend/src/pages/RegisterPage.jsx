@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Button from "../components/Button";
-import SignIn from "./SignIn.jsx";
-import SignUp from "./SignUp.jsx";
+import SignIn from "../components/SignIn.jsx";
+import SignUp from "../components/SignUp.jsx";
 
-export const LandingPage2 = (props) => {
+export const RegisterPage = (props) => {
   const [signinState, setSigninState] = useState(false);
   const [signupState, setSignupState] = useState(false);
 
@@ -57,7 +57,7 @@ export const LandingPage2 = (props) => {
         <p className="m-4 text-2xl text-white">
           <em>LavenderPass</em>
         </p>
-        <Button onClick={props.onClick}>
+        <Button onClick={()=>{props.handlePageChange("landingpage")}}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
