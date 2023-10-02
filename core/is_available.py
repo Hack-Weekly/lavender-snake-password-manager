@@ -16,6 +16,6 @@ def postgres_connection():
         )
         print("PostgreSQL is available!")
         return True
-    except OperationalError:
+    except Exception as e:
         print("PostgreSQL is not available!")
         return False
