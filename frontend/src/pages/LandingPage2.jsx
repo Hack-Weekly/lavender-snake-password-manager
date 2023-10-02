@@ -7,7 +7,7 @@ export const LandingPage2 = (props) => {
   const [signinState, setSigninState] = useState(false);
   const [signupState, setSignupState] = useState(false);
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -21,8 +21,8 @@ export const LandingPage2 = (props) => {
     // console.log("signing up...");
   };
 
-  const usernameChangeHandler = (event) => {
-    setUsername(event.target.value);
+  const emailChangeHandler = (event) => {
+    setEmail(event.target.value);
   };
 
   const passwordChangeHandler = (event) => {
@@ -35,18 +35,18 @@ export const LandingPage2 = (props) => {
 
   const doSignIn = (event) => {
     event.preventDefault();
-    console.log(username);
+    console.log(email);
     console.log(password);
-    setUsername("");
+    setEmail("");
     setPassword("");
   };
 
   const doSignUp = (event) => {
     event.preventDefault();
-    console.log(username);
+    console.log(email);
     console.log(password);
     console.log(confirmPassword);
-    setUsername("");
+    setEmail("");
     setPassword("");
     setConfirmPassword("");
   };
@@ -83,19 +83,19 @@ export const LandingPage2 = (props) => {
         {signinState && (
           <SignIn
             onSubmit={doSignIn}
-            onUsernameChange={usernameChangeHandler}
+            onEmailChange={emailChangeHandler}
             onPasswordChange={passwordChangeHandler}
-            username={username}
+            email={email}
             password={password}
           />
         )}
         {signupState && (
           <SignUp
             onSubmit={doSignUp}
-            onUsernameChange={usernameChangeHandler}
+            onEmailChange={emailChangeHandler}
             onPasswordChange={passwordChangeHandler}
             onConfirmPasswordChange={confirmPasswordChangeHandler}
-            username={username}
+            email={email}
             password={password}
             confirmPassword={confirmPassword}
           />
