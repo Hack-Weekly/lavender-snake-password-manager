@@ -7,8 +7,8 @@ export const RegisterPage = (props) => {
   const [signinState, setSigninState] = useState(false);
   const [signupState, setSignupState] = useState(false);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const signInHandler = () => {
@@ -16,17 +16,17 @@ export const RegisterPage = (props) => {
     // console.log("signing in...");
   };
 
-  const signUnHandler = () => {
+  const signUpHandler = () => {
     setSignupState(true);
     // console.log("signing up...");
   };
 
   const emailChangeHandler = (event) => {
-    setEmail(event.target.value);
+    setUserEmail(event.target.value);
   };
 
   const passwordChangeHandler = (event) => {
-    setPassword(event.target.value);
+    setUserPassword(event.target.value);
   };
 
   const confirmPasswordChangeHandler = (event) => {
@@ -35,19 +35,34 @@ export const RegisterPage = (props) => {
 
   const doSignIn = (event) => {
     event.preventDefault();
-    console.log(email);
-    console.log(password);
-    setEmail("");
-    setPassword("");
+    console.log(userEmail);
+    console.log(userPassword);
+    setUserEmail("");
+    setUserPassword("");
   };
 
-  const doSignUp = (event) => {
+  const doSignUp = async (event) => {
     event.preventDefault();
-    console.log(email);
-    console.log(password);
-    console.log(confirmPassword);
-    setEmail("");
-    setPassword("");
+    const userDetails = {
+      email: [userEmail],
+      password: [userPassword],
+      password2: [confirmPassword]
+    }
+
+    console.log(userDetails);
+
+    try {
+      const response = await fetch('http://localhost:8000/api/register/', {
+        method: 'POST',
+        body: JSON.stringify(userDetails)
+      });
+      console.log(response);
+    } catch(error) {
+      console.log('ERROR: ',error);
+    };
+
+    setUserEmail("");
+    setUserPassword("");
     setConfirmPassword("");
   };
 
@@ -77,7 +92,7 @@ export const RegisterPage = (props) => {
         {signinState || signupState || (
           <div className="space-x-4 my-20">
             <Button onClick={signInHandler}>Sign In</Button>
-            <Button onClick={signUnHandler}>Sign Up</Button>
+            <Button onClick={signUpHandler}>Sign Up</Button>
           </div>
         )}
         {signinState && (
@@ -85,8 +100,8 @@ export const RegisterPage = (props) => {
             onSubmit={doSignIn}
             onEmailChange={emailChangeHandler}
             onPasswordChange={passwordChangeHandler}
-            email={email}
-            password={password}
+            email={userEmail}
+            password={userPassword}
           />
         )}
         {signupState && (
@@ -95,8 +110,8 @@ export const RegisterPage = (props) => {
             onEmailChange={emailChangeHandler}
             onPasswordChange={passwordChangeHandler}
             onConfirmPasswordChange={confirmPasswordChangeHandler}
-            email={email}
-            password={password}
+            email={userEmail}
+            password={userPassword}
             confirmPassword={confirmPassword}
           />
         )}
