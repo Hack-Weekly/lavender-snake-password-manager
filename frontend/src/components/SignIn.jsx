@@ -17,7 +17,9 @@ const SignIn = (props) => {
         placeholder="Master Password"
         type="password"
       />
-      <Button onClick={props.onSubmit}>Sign In</Button>
+      <div className='block'>
+        <Button onClick={props.onSubmit}>Sign In</Button>
+      </div>
     </form>
   );
 };

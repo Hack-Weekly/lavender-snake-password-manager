@@ -2,6 +2,8 @@ import { useState } from "react";
 import Button from "../components/Button";
 import SignIn from "../components/SignIn.jsx";
 import SignUp from "../components/SignUp.jsx";
+import { register } from '../services/endpoints/user';
+import { login } from '../services/endpoints/user';
 
 export const RegisterPage = (props) => {
   const [signinState, setSigninState] = useState(false);
@@ -33,10 +35,21 @@ export const RegisterPage = (props) => {
     setConfirmPassword(event.target.value);
   };
 
-  const doSignIn = (event) => {
+  const doSignIn = async (event) => {
     event.preventDefault();
-    console.log(userEmail);
-    console.log(userPassword);
+    const userDetails = {
+      email: userEmail,
+      password: userPassword
+    }
+
+    try {
+      const res = await login(JSON.stringify(userDetails));
+      if(res === 200) console.log('Logging you in...');
+    } catch(error) {
+      const errResponse = error.response.data;
+      console.log('ERROR: ', errResponse.detail);
+    }
+
     setUserEmail("");
     setUserPassword("");
   };
@@ -44,22 +57,19 @@ export const RegisterPage = (props) => {
   const doSignUp = async (event) => {
     event.preventDefault();
     const userDetails = {
-      email: [userEmail],
-      password: [userPassword],
-      password2: [confirmPassword]
+      email: userEmail,
+      password: userPassword,
+      password2: confirmPassword
     }
 
-    console.log(userDetails);
-
     try {
-      const response = await fetch('http://localhost:8000/api/register/', {
-        method: 'POST',
-        body: JSON.stringify(userDetails)
-      });
-      console.log(response);
+      const res = await register(JSON.stringify(userDetails));
+      if(res.status === 201 && res.statusText === 'Created') console.log('Successfully created account!');
     } catch(error) {
-      console.log('ERROR: ',error);
-    };
+      const errResponse = error.response.data;
+      if(errResponse.email !== undefined) console.log('ERROR: ', errResponse.email[0]);
+      if(errResponse.password !== undefined) console.log('ERROR: ', errResponse.password[0]);
+    }
 
     setUserEmail("");
     setUserPassword("");
