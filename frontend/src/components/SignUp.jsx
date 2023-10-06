@@ -1,8 +1,14 @@
 import Button from "./Button.jsx";
 
 const SignUp = (props) => {
+  const { error } = props;
   return (
     <form className="m-6" onSubmit={props.onSubmit}>
+      {error.email.length > 0 ? (
+        <p className="text-red-500 text-xs">{error.email}</p>
+      ) : (
+        ""
+      )}
       <input
         onChange={props.onEmailChange}
         value={props.email}
@@ -10,6 +16,11 @@ const SignUp = (props) => {
         placeholder="Email"
         type="email"
       />
+      {error.password.length > 0 ? (
+        <p className="text-red-500 text-xs">{error.password}</p>
+      ) : (
+        ""
+      )}
       <input
         onChange={props.onPasswordChange}
         value={props.password}
@@ -17,6 +28,11 @@ const SignUp = (props) => {
         placeholder="Master password"
         type="password"
       />
+      {error.password2.length > 0 ? (
+        <p className="text-red-500 text-xs">{error.password2}</p>
+      ) : (
+        ""
+      )}
       <input
         onChange={props.onConfirmPasswordChange}
         value={props.confirmPassword}

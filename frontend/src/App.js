@@ -7,7 +7,7 @@ import { ProfilePage } from "./pages/ProfilePage";
 import { RegisterPage } from "./pages/RegisterPage";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState("homepage");
+  const [currentPage, setCurrentPage] = useState("landingpage");
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage.toLowerCase());
@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div className="App">
-      <div className="h-96 w-80 mx-auto bg-backdrop">
+      <div className="h-auto w-80 mx-auto bg-backdrop">
         {(() => {
           switch (currentPage) {
             case "landingpage":

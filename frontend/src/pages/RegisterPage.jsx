@@ -2,8 +2,8 @@ import { useState } from "react";
 import Button from "../components/Button";
 import SignIn from "../components/SignIn.jsx";
 import SignUp from "../components/SignUp.jsx";
-import { register } from '../services/endpoints/user';
-import { login } from '../services/endpoints/user';
+import { register } from "../services/endpoints/user";
+import { login } from "../services/endpoints/user";
 
 export const RegisterPage = (props) => {
   const [signinState, setSigninState] = useState(false);
@@ -12,6 +12,13 @@ export const RegisterPage = (props) => {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [error, setError] = useState({
+    email: "",
+    password: "",
+    password2: "",
+    detail: ""
+  });
 
   const signInHandler = () => {
     setSigninState(true);
@@ -39,15 +46,26 @@ export const RegisterPage = (props) => {
     event.preventDefault();
     const userDetails = {
       email: userEmail,
-      password: userPassword
-    }
+      password: userPassword,
+    };
 
     try {
       const res = await login(JSON.stringify(userDetails));
-      if(res === 200) console.log('Logging you in...');
-    } catch(error) {
-      const errResponse = error.response.data;
-      console.log('ERROR: ', errResponse.detail);
+      if (res === 200) console.log("Logging you in...");
+    } catch (err) {
+      const errResponse = err.response.data;
+      console.log("ERROR: ", errResponse);
+      setError((error) => {
+        const newError = {
+          ...error,
+          email: errResponse.email !== undefined ? errResponse.email[0] : "",
+          password:
+            errResponse.password !== undefined ? errResponse.password[0] : "",
+          detail: errResponse.detail !== '' ? errResponse.detail : ""
+        };
+        return newError;
+      });
+      console.log(error);
     }
 
     setUserEmail("");
@@ -59,16 +77,28 @@ export const RegisterPage = (props) => {
     const userDetails = {
       email: userEmail,
       password: userPassword,
-      password2: confirmPassword
-    }
+      password2: confirmPassword,
+    };
 
     try {
       const res = await register(JSON.stringify(userDetails));
-      if(res.status === 201 && res.statusText === 'Created') console.log('Successfully created account!');
-    } catch(error) {
-      const errResponse = error.response.data;
-      if(errResponse.email !== undefined) console.log('ERROR: ', errResponse.email[0]);
-      if(errResponse.password !== undefined) console.log('ERROR: ', errResponse.password[0]);
+      if (res.status === 201 && res.statusText === "Created")
+        console.log("Successfully created account!");
+    } catch (err) {
+      const errResponse = err.response.data;
+      console.log("ERROR: ", errResponse);
+      setError((error) => {
+        const newError = {
+          ...error,
+          email: errResponse.email !== undefined ? errResponse.email[0] : "",
+          password:
+            errResponse.password !== undefined ? errResponse.password[0] : "",
+          password2:
+            errResponse.password2 !== undefined ? errResponse.password2[0] : "",
+        };
+        return newError;
+      });
+      console.log(error);
     }
 
     setUserEmail("");
@@ -82,7 +112,11 @@ export const RegisterPage = (props) => {
         <p className="m-4 text-2xl text-white">
           <em>LavenderPass</em>
         </p>
-        <Button onClick={()=>{props.handlePageChange("landingpage")}}>
+        <Button
+          onClick={() => {
+            props.handlePageChange("landingpage");
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -112,6 +146,7 @@ export const RegisterPage = (props) => {
             onPasswordChange={passwordChangeHandler}
             email={userEmail}
             password={userPassword}
+            error={error}
           />
         )}
         {signupState && (
@@ -123,6 +158,7 @@ export const RegisterPage = (props) => {
             email={userEmail}
             password={userPassword}
             confirmPassword={confirmPassword}
+            error={error}
           />
         )}
       </div>
