@@ -1,15 +1,20 @@
 import { AddButton } from "./AddButton"
 import { PasswordInput } from "./AddPasswordInput"
 
-export const EditPassword = ({ email, password, website, iconUrl, handlePageChange }) => {
+export const EditPassword = ({ email, password, website, handlePageChange }) => {
     return(
-        <div className="flex flex-col gap-4 items-center justify-center p-4">
-            <div>
-                <img src={iconUrl} />
+        <div className="flex flex-col items-center p-4 border border-white rounded-md bg-[#302e43]">
+            <div className="text-white text-3xl">
+                {website}
             </div>
-            <PasswordInput value={email} />
-            <PasswordInput value={password} />
-            <AddButton value={"Edit"} onClick={() => {handlePageChange("PasswordCardList")}} />
+            <div className="flex flex-col gap-8 p-4">
+                <PasswordInput value={email} placeholder={"Email"} />
+                <PasswordInput value={password} placeholder={"Password"} />
+            </div>
+            <div className= "w-32">
+                <AddButton value={"Edit"} onClick={()=>{handlePageChange("homePage")}}/>
+            </div>
         </div>
     )
 }
+//

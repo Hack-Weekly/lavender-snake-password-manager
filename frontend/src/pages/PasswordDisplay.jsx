@@ -1,14 +1,14 @@
 import {EditPassword} from "../components/EditPassword";
 import {AddButton} from "../components/AddButton";
 
-export const PasswordDisplay = () => {
+export const PasswordDisplay = ({ website, handlePageChange }) => {
     return (
-        <div>
+        <div className="flex flex-col gap-8 items-center justify-center p-4">
             <div>
-                <EditPassword iconUrl={"https://cdn-icons-png.flaticon.com/512/25/25231.png"}/>
+                <EditPassword website={"Github"} handlePageChange={ handlePageChange }/>
             </div>
-            <div>
-                <AddButton />
+            <div className= "items-center justify-center w-48">
+                <AddButton value={"Back"} onClick={()=>{handlePageChange("homePage")}}/>
             </div>
         </div>
     )
