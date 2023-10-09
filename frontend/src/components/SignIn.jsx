@@ -1,23 +1,34 @@
 import Button from "./Button.jsx";
 
-const SignIn = props => {
+const SignIn = (props) => {
+  const { error } = props;
   return (
-    <form className="flex flex-col items-center mt-6" onSubmit={props.onSubmit}>
+    <form className="mt-6" onSubmit={props.onSubmit}>
+      {error.email.length > 0 ? (
+        <p className="text-red-500 text-xs">{error.email}</p>
+      ) : (error.detail.length > 0 ? <p className="text-red-500 text-xs">{error.detail}</p> : '')}
       <input
-        onChange={props.onUsernameChange}
-        value={props.username}
-        className="w-full text-lg text-white bg-input-bg m-2 p-2 rounded-md focus:border-btn-color"
-        placeholder="Username"
-        type="text"
+        onChange={props.onEmailChange}
+        value={props.email}
+        className="text-white bg-input-bg m-2 p-2 rounded-md focus:border-btn-color"
+        placeholder="Email"
+        type="email"
       />
+      {error.password.length > 0 ? (
+        <p className="text-red-500 text-xs">{error.password}</p>
+      ) : (
+        ""
+      )}
       <input
         onChange={props.onPasswordChange}
         value={props.password}
-        className="w-full text-lg text-white bg-input-bg m-2 p-2 rounded-md focus:border-btn-color"
+        className="text-white bg-input-bg m-2 p-2 rounded-md focus:border-btn-color"
         placeholder="Master Password"
         type="password"
       />
-      <Button onClick={props.onSubmit}>Sign In</Button>
+      <div className="block mb-4">
+        <Button onClick={props.onSubmit}>Sign In</Button>
+      </div>
     </form>
   );
 };

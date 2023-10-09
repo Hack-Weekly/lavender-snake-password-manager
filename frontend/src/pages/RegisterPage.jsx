@@ -2,52 +2,107 @@ import { useState } from "react";
 import Button from "../components/Button";
 import SignIn from "../components/SignIn.jsx";
 import SignUp from "../components/SignUp.jsx";
+import { register } from "../services/endpoints/user";
+import { login } from "../services/endpoints/user";
 
 export const RegisterPage = (props) => {
   const [signinState, setSigninState] = useState(false);
   const [signupState, setSignupState] = useState(false);
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [error, setError] = useState({
+    email: "",
+    password: "",
+    password2: "",
+    detail: ""
+  });
 
   const signInHandler = () => {
     setSigninState(true);
     // console.log("signing in...");
   };
 
-  const signUnHandler = () => {
+  const signUpHandler = () => {
     setSignupState(true);
     // console.log("signing up...");
   };
 
-  const usernameChangeHandler = (event) => {
-    setUsername(event.target.value);
+  const emailChangeHandler = (event) => {
+    setUserEmail(event.target.value);
   };
 
   const passwordChangeHandler = (event) => {
-    setPassword(event.target.value);
+    setUserPassword(event.target.value);
   };
 
   const confirmPasswordChangeHandler = (event) => {
     setConfirmPassword(event.target.value);
   };
 
-  const doSignIn = (event) => {
+  const doSignIn = async (event) => {
     event.preventDefault();
-    console.log(username);
-    console.log(password);
-    setUsername("");
-    setPassword("");
+    const userDetails = {
+      email: userEmail,
+      password: userPassword,
+    };
+
+    try {
+      const res = await login(JSON.stringify(userDetails));
+      if (res === 200) console.log("Logging you in...");
+    } catch (err) {
+      const errResponse = err.response.data;
+      console.log("ERROR: ", errResponse);
+      setError((error) => {
+        const newError = {
+          ...error,
+          email: errResponse.email !== undefined ? errResponse.email[0] : "",
+          password:
+            errResponse.password !== undefined ? errResponse.password[0] : "",
+          detail: errResponse.detail !== '' ? errResponse.detail : ""
+        };
+        return newError;
+      });
+      console.log(error);
+    }
+
+    setUserEmail("");
+    setUserPassword("");
   };
 
-  const doSignUp = (event) => {
+  const doSignUp = async (event) => {
     event.preventDefault();
-    console.log(username);
-    console.log(password);
-    console.log(confirmPassword);
-    setUsername("");
-    setPassword("");
+    const userDetails = {
+      email: userEmail,
+      password: userPassword,
+      password2: confirmPassword,
+    };
+
+    try {
+      const res = await register(JSON.stringify(userDetails));
+      if (res.status === 201 && res.statusText === "Created")
+        console.log("Successfully created account!");
+    } catch (err) {
+      const errResponse = err.response.data;
+      console.log("ERROR: ", errResponse);
+      setError((error) => {
+        const newError = {
+          ...error,
+          email: errResponse.email !== undefined ? errResponse.email[0] : "",
+          password:
+            errResponse.password !== undefined ? errResponse.password[0] : "",
+          password2:
+            errResponse.password2 !== undefined ? errResponse.password2[0] : "",
+        };
+        return newError;
+      });
+      console.log(error);
+    }
+
+    setUserEmail("");
+    setUserPassword("");
     setConfirmPassword("");
   };
 
@@ -57,7 +112,11 @@ export const RegisterPage = (props) => {
         <p className="m-4 text-2xl text-white">
           <em>LavenderPass</em>
         </p>
-        <Button onClick={()=>{props.handlePageChange("landingpage")}}>
+        <Button
+          onClick={() => {
+            props.handlePageChange("landingpage");
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -77,27 +136,29 @@ export const RegisterPage = (props) => {
         {signinState || signupState || (
           <div className="space-x-4 my-20">
             <Button onClick={signInHandler}>Sign In</Button>
-            <Button onClick={signUnHandler}>Sign Up</Button>
+            <Button onClick={signUpHandler}>Sign Up</Button>
           </div>
         )}
         {signinState && (
           <SignIn
             onSubmit={doSignIn}
-            onUsernameChange={usernameChangeHandler}
+            onEmailChange={emailChangeHandler}
             onPasswordChange={passwordChangeHandler}
-            username={username}
-            password={password}
+            email={userEmail}
+            password={userPassword}
+            error={error}
           />
         )}
         {signupState && (
           <SignUp
             onSubmit={doSignUp}
-            onUsernameChange={usernameChangeHandler}
+            onEmailChange={emailChangeHandler}
             onPasswordChange={passwordChangeHandler}
             onConfirmPasswordChange={confirmPasswordChangeHandler}
-            username={username}
-            password={password}
+            email={userEmail}
+            password={userPassword}
             confirmPassword={confirmPassword}
+            error={error}
           />
         )}
       </div>
