@@ -1,5 +1,5 @@
 import api from "../api";
-import { logout, getRefreshToken } from "../endpoints/users";
+import { logout, getRefreshToken } from "../endpoints/user";
 import { isTokenExpired } from "./isTokenExpired";
 
 export const isAuth = async () => {

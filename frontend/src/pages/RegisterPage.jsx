@@ -5,7 +5,7 @@ import SignUp from "../components/SignUp.jsx";
 import { register } from "../services/endpoints/user";
 import { login } from "../services/endpoints/user";
 
-export const RegisterPage = (props) => {
+export const RegisterPage = props => {
   const [signinState, setSigninState] = useState(false);
   const [signupState, setSignupState] = useState(false);
 
@@ -17,7 +17,7 @@ export const RegisterPage = (props) => {
     email: "",
     password: "",
     password2: "",
-    detail: ""
+    detail: "",
   });
 
   const signInHandler = () => {
@@ -30,19 +30,19 @@ export const RegisterPage = (props) => {
     // console.log("signing up...");
   };
 
-  const emailChangeHandler = (event) => {
+  const emailChangeHandler = event => {
     setUserEmail(event.target.value);
   };
 
-  const passwordChangeHandler = (event) => {
+  const passwordChangeHandler = event => {
     setUserPassword(event.target.value);
   };
 
-  const confirmPasswordChangeHandler = (event) => {
+  const confirmPasswordChangeHandler = event => {
     setConfirmPassword(event.target.value);
   };
 
-  const doSignIn = async (event) => {
+  const doSignIn = async event => {
     event.preventDefault();
     const userDetails = {
       email: userEmail,
@@ -51,17 +51,18 @@ export const RegisterPage = (props) => {
 
     try {
       const res = await login(JSON.stringify(userDetails));
-      if (res === 200) console.log("Logging you in...");
+      if (res === 200) {
+        props.handlePageChange("homepage");
+      }
     } catch (err) {
-      const errResponse = err.response.data;
+      const errResponse = err.response;
       console.log("ERROR: ", errResponse);
-      setError((error) => {
+      setError(error => {
         const newError = {
           ...error,
           email: errResponse.email !== undefined ? errResponse.email[0] : "",
-          password:
-            errResponse.password !== undefined ? errResponse.password[0] : "",
-          detail: errResponse.detail !== '' ? errResponse.detail : ""
+          password: errResponse.password !== undefined ? errResponse.password[0] : "",
+          detail: errResponse.detail !== "" ? errResponse.detail : "",
         };
         return newError;
       });
@@ -72,7 +73,7 @@ export const RegisterPage = (props) => {
     setUserPassword("");
   };
 
-  const doSignUp = async (event) => {
+  const doSignUp = async event => {
     event.preventDefault();
     const userDetails = {
       email: userEmail,
@@ -82,19 +83,24 @@ export const RegisterPage = (props) => {
 
     try {
       const res = await register(JSON.stringify(userDetails));
-      if (res.status === 201 && res.statusText === "Created")
-        console.log("Successfully created account!");
+      if (res.status === 201 && res.statusText === "Created") {
+        try {
+          await login({ email: userEmail, password: userPassword });
+          props.setIsAuthenticated(true);
+          props.handlePageChange("homepage");
+        } catch (err) {
+          console.error(err);
+        }
+      }
     } catch (err) {
       const errResponse = err.response.data;
       console.log("ERROR: ", errResponse);
-      setError((error) => {
+      setError(error => {
         const newError = {
           ...error,
           email: errResponse.email !== undefined ? errResponse.email[0] : "",
-          password:
-            errResponse.password !== undefined ? errResponse.password[0] : "",
-          password2:
-            errResponse.password2 !== undefined ? errResponse.password2[0] : "",
+          password: errResponse.password !== undefined ? errResponse.password[0] : "",
+          password2: errResponse.password2 !== undefined ? errResponse.password2[0] : "",
         };
         return newError;
       });
@@ -115,21 +121,15 @@ export const RegisterPage = (props) => {
         <Button
           onClick={() => {
             props.handlePageChange("landingpage");
-          }}
-        >
+          }}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="w-4 h-4 text-white"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
-            />
+            className="w-4 h-4 text-white">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
           </svg>
         </Button>
 
